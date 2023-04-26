@@ -453,8 +453,15 @@ public:
         cout << "x~:" << endl;
         Matrix<double> answer = (Matrix<double>)aug.inverseMatrix() * A.transposed() * b;
         cout << answer;
-        fprintf(pipe, "plot [-15 : 15] [-15 : 15] %lf*x**3 + %lf*x**2 + %lf*x**1 + %lf*x**0 , '-' using 1:2 with points\n", answer.matrix[3][0],
-                answer.matrix[2][0],answer.matrix[1][0], answer.matrix[0][0]);
+        fprintf(pipe, "plot [-15 : 15] [-15 : 15] ");
+        for (int i=0; i < answer.height; i++) {
+            fprintf(pipe, "%lf*x**", answer.matrix[answer.height-i-1][0]);
+            fprintf(pipe, "%d", answer.height-i-1);
+            if (i!=answer.height-1) {
+                fprintf(pipe, " + ");
+            }
+        }
+        fprintf(pipe, " , '-' using 1:2 with points\n");
         for (int i = 0; i < coordinates.height; i++) {
             fprintf(pipe, "%f\t%f\n", coordinates.matrix[i][0], coordinates.matrix[i][1]);
         }
