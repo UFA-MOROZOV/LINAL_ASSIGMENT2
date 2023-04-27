@@ -5,7 +5,6 @@
 
 using namespace std;
 
-
 template<typename T>
 class Matrix {
 public:
@@ -26,7 +25,6 @@ public:
         }
     }
 
-
     Matrix &operator=(Matrix matrix2) {
         this->matrix.resize(matrix2.height);
         this->height = matrix2.height;
@@ -39,7 +37,6 @@ public:
         }
         return *this;
     }
-
 
     friend istream &operator>>(istream &input, Matrix &matrix1) {
         int n, m;
@@ -70,11 +67,13 @@ public:
     }
 
     friend Matrix operator+(Matrix matrix1, Matrix matrix2) {
-        if ((matrix1.height == matrix2.height && matrix1.width == matrix2.width)) {
+        if ((matrix1.height == matrix2.height && matrix1.width ==
+                                                 matrix2.width)) {
             Matrix sum = Matrix(matrix1.height, matrix1.width);
             for (int i = 0; i < matrix1.height; i++) {
                 for (int j = 0; j < matrix1.width; j++) {
-                    sum.matrix[i][j] = matrix1.matrix[i][j] + matrix2.matrix[i][j];
+                    sum.matrix[i][j] = matrix1.matrix[i][j] +
+                                       matrix2.matrix[i][j];
                 }
             }
             return sum;
@@ -84,11 +83,13 @@ public:
     }
 
     friend Matrix operator-(Matrix matrix1, Matrix matrix2) {
-        if ((matrix1.height == matrix2.height && matrix1.width == matrix2.width)) {
+        if ((matrix1.height == matrix2.height && matrix1.width ==
+                                                 matrix2.width)) {
             Matrix dif = Matrix(matrix1.height, matrix1.width);
             for (int i = 0; i < matrix1.height; i++) {
                 for (int j = 0; j < matrix1.width; j++) {
-                    dif.matrix[i][j] = matrix1.matrix[i][j] - matrix2.matrix[i][j];
+                    dif.matrix[i][j] = matrix1.matrix[i][j] -
+                                       matrix2.matrix[i][j];
                 }
             }
             return dif;
@@ -96,7 +97,6 @@ public:
         cout << "Error: the dimensional problem occurred\n";
         return Matrix();
     }
-
 
     friend Matrix operator*(Matrix matrix1, Matrix matrix2) {
         if (matrix1.width == matrix2.height) {
@@ -117,7 +117,6 @@ public:
         return Matrix();
     }
 
-
     Matrix transposed() {
         Matrix answer = Matrix(width, height);
         for (int i = 0; i < width; i++) {
@@ -127,7 +126,6 @@ public:
         }
         return answer;
     }
-
 
     int indexPivot(int column) {
         int maxIndex = column;
@@ -140,9 +138,7 @@ public:
         }
         return maxIndex;
     }
-
 };
-
 
 template<typename T>
 class EliminationMatrix;
@@ -155,7 +151,6 @@ class AugmentedMatrix;
 
 template<typename T>
 class NormalizationMatrix;
-
 
 template<typename T>
 class SquareMatrix : public Matrix<T> {
@@ -228,7 +223,6 @@ public:
     }
 };
 
-
 template<typename T>
 class IdentityMatrix : public SquareMatrix<T> {
 public:
@@ -241,27 +235,28 @@ public:
     }
 };
 
-
 template<typename T>
 class EliminationMatrix : public SquareMatrix<T> {
 public:
     EliminationMatrix() : SquareMatrix<T>() {}
 
-    EliminationMatrix(int n1, int n2, SquareMatrix<T> matrix1) : SquareMatrix<T>(matrix1.height) {
+    EliminationMatrix(int n1, int n2, SquareMatrix<T> matrix1) :
+            SquareMatrix<T>(matrix1.height) {
         for (int i = 0; i < this->height; i++) {
             this->matrix[i][i] = 1;
         }
-        this->matrix[n1][n2] = -matrix1.matrix[n1][n2] / matrix1.matrix[n2][n2];
+        this->matrix[n1][n2] = -matrix1.matrix[n1][n2] /
+                               matrix1.matrix[n2][n2];
     }
 };
-
 
 template<typename T>
 class PermutationMatrix : public SquareMatrix<T> {
 public:
     PermutationMatrix() : SquareMatrix<T>() {}
 
-    PermutationMatrix(int n1, int n2, SquareMatrix<T> matrix1) : SquareMatrix<T>(matrix1.height) {
+    PermutationMatrix(int n1, int n2, SquareMatrix<T> matrix1) :
+            SquareMatrix<T>(matrix1.height) {
         for (int i = 0; i < this->height; i++) {
             if (i != n1 && i != n2) {
                 this->matrix[i][i] = 1;
@@ -273,7 +268,6 @@ public:
         }
     }
 };
-
 
 template<typename T>
 class ColumnVector : public Matrix<T> {
@@ -340,14 +334,14 @@ public:
     using Matrix<T>::operator=;
 };
 
-
 template<typename T>
 class AugmentedMatrix {
 public:
     SquareMatrix<T> A;
     Matrix<T> B;
 
-    AugmentedMatrix(SquareMatrix<T> augmentedMatrix1, SquareMatrix<T> augmentedMatrix2) {
+    AugmentedMatrix(SquareMatrix<T> augmentedMatrix1, SquareMatrix<T>
+    augmentedMatrix2) {
         A = augmentedMatrix1;
         B = augmentedMatrix2;
     }
@@ -365,7 +359,8 @@ public:
         return output;
     }
 
-    friend AugmentedMatrix operator*(Matrix<T> matrix2, AugmentedMatrix matrix1) {
+    friend AugmentedMatrix operator*(Matrix<T> matrix2, AugmentedMatrix
+    matrix1) {
         matrix1.A = SquareMatrix(matrix2) * matrix1.A;
         matrix1.B = matrix2 * matrix1.B;
         return matrix1;
@@ -399,13 +394,13 @@ public:
     }
 };
 
-
 template<typename T>
 class NormalizationMatrix : public SquareMatrix<T> {
 public:
     NormalizationMatrix() : SquareMatrix<T>() {}
 
-    explicit NormalizationMatrix(Matrix<T> matrix1) : SquareMatrix<T>(matrix1.height) {
+    explicit NormalizationMatrix(Matrix<T> matrix1) :
+            SquareMatrix<T>(matrix1.height) {
         for (int i = 0; i < this->height; i++) {
             this->matrix[i][i] = (1 / matrix1.matrix[i][i]);
         }
@@ -413,7 +408,6 @@ public:
 
     using Matrix<T>::operator=;
 };
-
 
 template<typename T>
 class LeastSquareApproximator {
@@ -446,24 +440,27 @@ public:
         cout << A.transposed() * A;
         cout << "(A_T*A)^-1:" << endl;
         AugmentedMatrix aug = AugmentedMatrix<double>(A.transposed() * A,
+
                                                       IdentityMatrix<double>(A.width));
         cout << aug.inverseMatrix();
         cout << "A_T*b:" << endl;
         cout << A.transposed() * b;
         cout << "x~:" << endl;
-        Matrix<double> answer = (Matrix<double>)aug.inverseMatrix() * A.transposed() * b;
+        Matrix<double> answer = (Matrix<double>) aug.inverseMatrix() *
+                                A.transposed() * b;
         cout << answer;
         fprintf(pipe, "plot [-15 : 15] [-15 : 15] ");
-        for (int i=0; i < answer.height; i++) {
-            fprintf(pipe, "%lf*x**", answer.matrix[answer.height-i-1][0]);
-            fprintf(pipe, "%d", answer.height-i-1);
-            if (i!=answer.height-1) {
+        for (int i = 0; i < answer.height; i++) {
+            if (i != 0 && answer.matrix[answer.height - i - 1][0] >=0) {
                 fprintf(pipe, " + ");
             }
+            fprintf(pipe, "%lf*x**", answer.matrix[answer.height - i - 1][0]);
+            fprintf(pipe, "%d", answer.height - i - 1);
         }
         fprintf(pipe, " , '-' using 1:2 with points\n");
         for (int i = 0; i < coordinates.height; i++) {
-            fprintf(pipe, "%f\t%f\n", coordinates.matrix[i][0], coordinates.matrix[i][1]);
+            fprintf(pipe, "%f\t%f\n", coordinates.matrix[i][0],
+                    coordinates.matrix[i][1]);
         }
         fprintf(pipe, "e\n");
         fflush(pipe);
@@ -472,7 +469,6 @@ public:
 #else
         pclose(pipe);
 #endif
-
     }
 };
 
@@ -486,3 +482,4 @@ int main() {
     LeastSquareApproximator<double> tool;
     tool.approximate(coordinates, step);
 }
+
